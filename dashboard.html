@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StockFlow - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&amp;family=Geist+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#f9dfb8",
+                        "surface-container-low": "#f5f3f4",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#d1e1fa",
+                        "on-primary-container": "#becae0",
+                        "primary-fixed": "#d8e3fa",
+                        "error-container": "#ffdad6",
+                        "secondary": "#515f74",
+                        "on-background": "#1b1b1d",
+                        "inverse-primary": "#bcc7dd",
+                        "surface-container": "#f0edef",
+                        "primary-container": "#4a5568",
+                        "inverse-on-surface": "#f3f0f1",
+                        "surface": "#fbf8fa",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "outline": "#75777d",
+                        "on-tertiary-container": "#dfc6a0",
+                        "background": "#fbf8fa",
+                        "on-tertiary-fixed-variant": "#554427",
+                        "surface-tint": "#545f72",
+                        "primary-fixed-dim": "#bcc7dd",
+                        "on-secondary-fixed-variant": "#39485c",
+                        "surface-container-high": "#eae7e9",
+                        "on-primary-fixed": "#111c2c",
+                        "inverse-surface": "#303032",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fbf8fa",
+                        "secondary-fixed-dim": "#b8c8e0",
+                        "on-secondary-container": "#556479",
+                        "on-surface-variant": "#44474c",
+                        "outline-variant": "#c5c6cd",
+                        "tertiary": "#4b3b1f",
+                        "primary": "#333e50",
+                        "tertiary-container": "#645234",
+                        "surface-variant": "#e4e2e3",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#d4e4fc",
+                        "tertiary-fixed-dim": "#dcc39d",
+                        "surface-dim": "#dcd9db",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "surface-container-highest": "#e4e2e3",
+                        "on-tertiary-fixed": "#261902",
+                        "on-surface": "#1b1b1d",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "container-max": "1440px",
+                        "base": "4px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display": ["Geist"],
+                        "mono-data": ["Geist Mono"],
+                        "headline-lg-mobile": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "label-md": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-md": ["Geist"]
+                    },
+                    "fontSize": {
+                        "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom scrollbar for table */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: theme('colors.surface-container');
+            border-radius: theme('borderRadius.full');
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: theme('borderRadius.full');
+        }
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-hidden">
+<!-- App Container -->
+<div class="flex h-screen w-full mx-auto max-w-container-max relative bg-surface-bright">
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-64 flex-col p-lg gap-lg bg-surface-container-low border-r border-outline-variant z-50">
+<!-- Brand -->
+<div class="flex items-center gap-sm px-sm pt-sm pb-md">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined filled text-[20px]">inventory_2</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">StockFlow</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-80">Inventory Management</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-sm">
+<!-- Active -->
+<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container rounded-xl px-md py-sm font-semibold transition-transform duration-200 hover:scale-[0.98]" href="#">
+<span class="material-symbols-outlined filled">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-xl px-md py-sm transition-all hover:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Stok Barang</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-xl px-md py-sm transition-all hover:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">request_quote</span>
+<span>Permintaan Restock</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-xl px-md py-sm transition-all hover:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span>Laporan</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-xl px-md py-sm transition-all hover:scale-[0.98] mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Pengaturan</span>
+</a>
+</nav>
+<!-- Logout -->
+<div class="pt-md border-t border-outline-variant mt-auto">
+<button class="w-full flex items-center gap-md text-error hover:bg-error-container hover:text-on-error-container rounded-xl px-md py-sm transition-colors font-semibold" onclick="window.location.href='{{DATA:SCREEN:SCREEN_35}}'">
+<span class="material-symbols-outlined">logout</span>
+<span>Keluar</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full md:ml-64 relative overflow-hidden bg-background">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-lg py-md bg-surface shadow-sm sticky top-0 z-40">
+<!-- Mobile Menu Button -->
+<button class="md:hidden p-2 text-on-surface-variant rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search -->
+<div class="hidden md:flex items-center bg-surface-container-low rounded-xl px-md py-sm w-96 border border-outline-variant focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+<input class="bg-transparent border-none outline-none w-full font-body-md text-body-md text-on-surface placeholder-on-surface-variant focus:ring-0 p-0" placeholder="Cari barang, SKU..." type="text"/>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant rounded-full hover:bg-surface-container-high transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-2 w-2 h-2 bg-error rounded-full border border-surface"></span>
+</button>
+<div class="flex items-center gap-sm pl-md border-l border-outline-variant">
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A small, professional avatar of a warehouse administrator, clear lighting, minimalist style, corporate headshot against a neutral grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnRIAZ76P8UW6s86BlfHWRcvCQmfv11msOYjecBFEnx2aUS8Vil9UEn_vdswwZGy4kwofxVr_JYvW47hJDQahy4trofc3HY0-wLIXw9TnTLCirPa7LO782ElJuxQfpOHbFiLgUgW1CbTlu8oCJlf-X9AHESsI_0eC4BiNFiuSmJ9AI30rKvpN5jBMCzPFUNVMHLrf6pNL_g6LlOSKUvEq2E-bhP9H7uTuJX2HruU8hvKLo3li7SsK_56kTTzbRIeubzb__GNyu7MU"/>
+<div class="hidden sm:block">
+<p class="font-label-md text-label-md font-bold text-on-surface">Admin Utama</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Gudang Pusat</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<div class="flex-1 overflow-y-auto p-md md:p-lg">
+<!-- Warning Banner -->
+<div class="bg-error-container text-on-error-container rounded-xl p-md flex items-center justify-between mb-lg border border-error/20">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined filled text-error">warning</span>
+<p class="font-body-md text-body-md font-semibold">Perhatian: 8 barang kritis dan butuh restock segera.</p>
+</div>
+<button class="font-label-md text-label-md font-bold hover:underline">Lihat Detail</button>
+</div>
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md mb-lg">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-on-surface">Ringkasan Inventaris</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Pantau status stok dan pergerakan barang hari ini.</p>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md font-bold px-lg py-3 rounded-xl flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md active:scale-95" onclick="document.getElementById('addModal').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Tambah Barang Baru
+                    </button>
+</div>
+<!-- KPI Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-xl">
+<!-- Total Items -->
+<div class="bg-surface-container-lowest rounded-2xl p-lg border border-outline-variant shadow-sm flex flex-col justify-between h-32 relative overflow-hidden">
+<div class="flex justify-between items-start z-10">
+<p class="font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Total Barang</p>
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+</div>
+</div>
+<h3 class="font-display text-display font-bold text-on-surface z-10">1.240</h3>
+<!-- Decorative background -->
+<div class="absolute -bottom-4 -right-4 w-24 h-24 bg-surface-container-low rounded-full opacity-50"></div>
+</div>
+<!-- Low Stock -->
+<div class="bg-surface-container-lowest rounded-2xl p-lg border border-outline-variant shadow-sm flex flex-col justify-between h-32 relative overflow-hidden">
+<div class="flex justify-between items-start z-10">
+<p class="font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Stok Menipis</p>
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">trending_down</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2 z-10">
+<h3 class="font-display text-display font-bold text-tertiary-container">8</h3>
+<span class="font-label-md text-label-md text-on-surface-variant">Item</span>
+</div>
+</div>
+<!-- Out of Stock -->
+<div class="bg-surface-container-lowest rounded-2xl p-lg border border-outline-variant shadow-sm flex flex-col justify-between h-32 relative overflow-hidden">
+<div class="flex justify-between items-start z-10">
+<p class="font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Stok Habis</p>
+<div class="w-8 h-8 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">error</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2 z-10">
+<h3 class="font-display text-display font-bold text-error">3</h3>
+<span class="font-label-md text-label-md text-on-surface-variant">Item</span>
+</div>
+</div>
+</div>
+<!-- Main Data Table Container -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Daftar Inventaris</h3>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+</div>
+</div>
+<div class="table-container overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="p-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider whitespace-nowrap">Nama Barang &amp; SKU</th>
+<th class="p-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Kategori</th>
+<th class="p-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-right">Jumlah Stok</th>
+<th class="p-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-center">Status</th>
+<th class="p-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant bg-surface-container-lowest">
+<!-- Row 1 - Safe -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="p-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">monitor</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface">Monitor Dell 27"</p>
+<p class="font-mono-data text-mono-data text-on-surface-variant">SKU-MON-001</p>
+</div>
+</div>
+</td>
+<td class="p-md font-body-md text-body-md text-on-surface-variant">Elektronik</td>
+<td class="p-md font-mono-data text-mono-data text-right text-on-surface font-semibold">45 Unit</td>
+<td class="p-md text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md font-bold">
+                                            Stok Aman
+                                        </span>
+</td>
+<td class="p-md text-right">
+<div class="flex items-center justify-end gap-2 relative">
+<div class="relative">
+<button class="px-3 py-1.5 bg-surface border border-outline-variant rounded-lg font-label-md text-label-md font-bold text-primary hover:bg-surface-container transition-colors flex items-center gap-1" onclick="toggleRestock(this)">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                                                    Restock
+                                                </button>
+<div class="hidden restock-popover absolute right-0 top-full mt-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg p-sm z-20 w-48 text-left">
+<label class="font-label-md text-label-md text-on-surface mb-2 block">Tambah Stok</label>
+<div class="flex gap-2">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-primary outline-none" placeholder="Jml" type="number"/>
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-2 py-1 rounded-lg text-sm transition-colors" onclick="submitRestock(this)">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+</div>
+</div>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 - Low -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="p-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">keyboard</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface">Mechanical Keyboard K8</p>
+<p class="font-mono-data text-mono-data text-on-surface-variant">SKU-KB-022</p>
+</div>
+</div>
+</td>
+<td class="p-md font-body-md text-body-md text-on-surface-variant">Aksesoris</td>
+<td class="p-md font-mono-data text-mono-data text-right text-tertiary-container font-semibold">12 Unit</td>
+<td class="p-md text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-md text-label-md font-bold">
+                                            Stok Menipis
+                                        </span>
+</td>
+<td class="p-md text-right">
+<div class="flex items-center justify-end gap-2 relative">
+<div class="relative">
+<button class="px-3 py-1.5 bg-tertiary-fixed border border-tertiary-fixed-dim rounded-lg font-label-md text-label-md font-bold text-on-tertiary-fixed-variant hover:brightness-95 transition-colors flex items-center gap-1" onclick="toggleRestock(this)">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                                                    Restock
+                                                </button>
+<div class="hidden restock-popover absolute right-0 top-full mt-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg p-sm z-20 w-48 text-left">
+<label class="font-label-md text-label-md text-on-surface mb-2 block">Tambah Stok</label>
+<div class="flex gap-2">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-primary outline-none" placeholder="Jml" type="number"/>
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-2 py-1 rounded-lg text-sm transition-colors" onclick="submitRestock(this)">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+</div>
+</div>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 - Out -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group bg-error-container/10">
+<td class="p-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center opacity-70">
+<span class="material-symbols-outlined text-on-surface-variant">mouse</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface">Wireless Mouse M330</p>
+<p class="font-mono-data text-mono-data text-on-surface-variant">SKU-MS-045</p>
+</div>
+</div>
+</td>
+<td class="p-md font-body-md text-body-md text-on-surface-variant">Aksesoris</td>
+<td class="p-md font-mono-data text-mono-data text-right text-error font-semibold">0 Unit</td>
+<td class="p-md text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-error text-on-error font-label-md text-label-md font-bold">
+                                            Stok Habis
+                                        </span>
+</td>
+<td class="p-md text-right">
+<div class="flex items-center justify-end gap-2 relative">
+<div class="relative">
+<button class="px-3 py-1.5 bg-error text-on-error rounded-lg font-label-md text-label-md font-bold hover:bg-error/90 transition-colors flex items-center gap-1 shadow-sm" onclick="toggleRestock(this)">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                                                    Restock
+                                                </button>
+<div class="hidden restock-popover absolute right-0 top-full mt-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg p-sm z-20 w-48 text-left">
+<label class="font-label-md text-label-md text-on-surface mb-2 block">Tambah Stok</label>
+<div class="flex gap-2">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-primary outline-none" placeholder="Jml" type="number"/>
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-2 py-1 rounded-lg text-sm transition-colors" onclick="submitRestock(this)">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+</div>
+</div>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Bottom spacer for mobile nav if needed later -->
+<div class="h-24 md:h-8"></div>
+</div>
+</main>
+</div>
+<!-- Modal: Add New Item (Hidden by default) -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center" id="addModal">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-on-background/40 backdrop-blur-sm" onclick="document.getElementById('addModal').classList.add('hidden')"></div>
+<!-- Modal Content -->
+<div class="relative bg-surface-container-lowest w-full max-w-lg rounded-2xl shadow-2xl border border-outline-variant m-md flex flex-col max-h-[921px]">
+<!-- Header -->
+<div class="flex justify-between items-center p-lg border-b border-outline-variant bg-surface-bright rounded-t-2xl">
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Tambah Barang Baru</h3>
+<button class="p-1 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors" onclick="document.getElementById('addModal').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Body (Scrollable) -->
+<div class="p-lg overflow-y-auto flex flex-col gap-md">
+<!-- Field: Nama Barang -->
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface mb-xs">Nama Barang *</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-md py-sm font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-primary focus:bg-surface-bright transition-all" placeholder="Masukkan nama barang" type="text"/>
+</div>
+<!-- Field: Kategori -->
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface mb-xs">Kategori *</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-md py-sm font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-primary focus:bg-surface-bright transition-all appearance-none pr-10">
+<option value="">Pilih Kategori</option>
+<option value="elektronik">Elektronik</option>
+<option value="aksesoris">Aksesoris</option>
+<option value="office">Peralatan Kantor</option>
+</select>
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Fields: Stok Grid -->
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface mb-xs">Jumlah Awal *</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-md py-sm font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-primary focus:bg-surface-bright transition-all" placeholder="0" type="number"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface mb-xs">Batas Minimum Stok *</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-md py-sm font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-primary focus:bg-surface-bright transition-all" placeholder="0" type="number"/>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1 opacity-70">Peringatan akan muncul jika stok dibawah batas ini.</p>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="p-lg border-t border-outline-variant bg-surface-bright rounded-b-2xl flex justify-end gap-sm">
+<button class="px-md py-sm rounded-xl font-label-md text-label-md font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors" onclick="document.getElementById('addModal').classList.add('hidden')">
+                    Batal
+                </button>
+<button class="px-lg py-sm rounded-xl bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary/90 transition-colors shadow-sm" onclick="document.getElementById('addModal').classList.add('hidden')">
+                    Simpan Barang
+                </button>
+</div>
+</div>
+</div>
+<script>
+    function toggleRestock(btn) {
+        // Hide all other open popovers first
+        document.querySelectorAll('.restock-popover').forEach(popover => {
+            if (popover !== btn.nextElementSibling) {
+                popover.classList.add('hidden');
+            }
+        });
+        const popover = btn.nextElementSibling;
+        popover.classList.toggle('hidden');
+    }
+
+    function submitRestock(btn) {
+        const popover = btn.closest('.restock-popover');
+        if(popover) {
+            popover.classList.add('hidden');
+        }
+    }
+
+    // Close popovers when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.relative')) {
+            document.querySelectorAll('.restock-popover').forEach(popover => {
+                popover.classList.add('hidden');
+            });
+        }
+    });
+</script>
+</body></html>
